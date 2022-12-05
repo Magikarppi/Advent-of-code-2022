@@ -38,48 +38,38 @@ let total = 0;
       };
 
       const opponentMove = line[0];
-      const yourMove = line[2];
+      const playerMove = line[2];
 
       function addWinPoints() {
-        total = total + points[yourMove] + 6;
+        total = total + points[playerMove] + 6;
       }
 
       function addDrawPoints() {
-        total = total + points[yourMove] + 3;
+        total = total + points[playerMove] + 3;
       }
 
       function addLossPoints() {
-        total = total + points[yourMove];
+        total = total + points[playerMove];
       }
 
-      if (yourMove === 'Y') {
-        if (opponentMove === 'A') {
-          addWinPoints();
-        } else if (opponentMove === 'B') {
-          addDrawPoints();
-        } else {
-          addLossPoints();
-        }
-      }
+      const playerWins = {
+        Y: 'A',
+        X: 'C',
+        Z: 'B',
+      };
 
-      if (yourMove === 'X') {
-        if (opponentMove === 'C') {
-          addWinPoints();
-        } else if (opponentMove === 'A') {
-          addDrawPoints();
-        } else {
-          addLossPoints();
-        }
-      }
+      const draws = {
+        Y: 'B',
+        X: 'A',
+        Z: 'C',
+      };
 
-      if (yourMove === 'Z') {
-        if (opponentMove === 'B') {
-          addWinPoints();
-        } else if (opponentMove === 'C') {
-          addDrawPoints();
-        } else {
-          addLossPoints();
-        }
+      if (playerWins[playerMove] === opponentMove) {
+        addWinPoints();
+      } else if (draws[playerMove] === opponentMove) {
+        addDrawPoints();
+      } else {
+        addLossPoints();
       }
     });
 
