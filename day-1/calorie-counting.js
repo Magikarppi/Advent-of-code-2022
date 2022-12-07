@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-fs.readFile('data2.txt', 'utf8', (err, data) => {
+fs.readFile('data.txt', 'utf8', (err, data) => {
   if (err) {
     console.error(err);
     return;
@@ -14,7 +14,7 @@ fs.readFile('data2.txt', 'utf8', (err, data) => {
   );
   let currentCalorieCarriage = [];
   let currentCalorie = '';
-  let currentHigh = 0;
+  let currentTopThree = [0, 0, 0];
 
   for (let i = 0; i < formattedData.length; i++) {
     const currChar = formattedData[i];
@@ -35,9 +35,17 @@ fs.readFile('data2.txt', 'utf8', (err, data) => {
     if (currChar === '|') {
       currentCalorieCarriage.push(parseInt(currentCalorie));
       const blockSum = sum(currentCalorieCarriage);
-      // if calculated sum for calories is greater than current high, update current high
-      if (blockSum > currentHigh) {
-        currentHigh = blockSum;
+      // update current-top-three highest calories
+      if (blockSum > currentTopThree[0]) {
+        currentTopThree[2] = currentTopThree[1];
+        currentTopThree[1] = currentTopThree[0];
+
+        currentTopThree[0] = blockSum;
+      } else if (blockSum > currentTopThree[1]) {
+        currentTopThree[2] = currentTopThree[1];
+        currentTopThree[1] = blockSum;
+      } else if (blockSum > currentTopThree[2]) {
+        currentTopThree[2] = blockSum;
       }
       // reset for a new set
       currentCalorie = '';
@@ -45,5 +53,6 @@ fs.readFile('data2.txt', 'utf8', (err, data) => {
     }
   }
 
-  console.log('currentHigh', currentHigh);
+  console.log('Highest', currentTopThree[0]);
+  console.log('Sum of highest three: ', sum(currentTopThree));
 });
