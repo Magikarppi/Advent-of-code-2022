@@ -6,7 +6,9 @@ fs.readFile('data.txt', 'utf8', function (err, data) {
     return console.log(err);
   }
 
-  let count = 0;
+  let overlapCompletelyCount = 0;
+  let overlapPartiallyCount = 0;
+
   const dataArr = data.split('\n');
 
   for (let i = 0; i < dataArr.length; i++) {
@@ -35,11 +37,20 @@ fs.readFile('data.txt', 'utf8', function (err, data) {
 
     const sect1InSect2 = sect1Begin >= sect2Begin && sect1End <= sect2End;
     const sect2InSect1 = sect2Begin >= sect1Begin && sect2End <= sect1End;
+    const someOverlap =
+      (sect1Begin >= sect2Begin && sect1Begin <= sect2End) ||
+      (sect2Begin >= sect1Begin && sect2End <= sect1End) ||
+      (sect2End >= sect1End && sect2Begin <= sect1End);
 
     if (sect1InSect2 || sect2InSect1) {
-      count++;
+      overlapCompletelyCount++;
+    }
+
+    if (someOverlap) {
+      overlapPartiallyCount++;
     }
   }
 
-  console.log('count: ', count);
+  console.log('overlapCompletelyCount: ', overlapCompletelyCount);
+  console.log('overlapPartially: ', overlapPartiallyCount);
 });
